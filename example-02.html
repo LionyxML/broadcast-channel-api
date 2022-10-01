@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sync actions between tabs</title>
+  </head>
+  <body>
+    <h3>Status: <span id="status">signed in</span></h3>
+    <button id="btn" onclick="toggleStatus()">Log out</button>
+    <script>
+      const status = document.querySelector("#status");
+      const btn = document.querySelector("#btn");
+      const logoutChannel = new BroadcastChannel("logout_channel");
+      let currentStatus = "signedIn";
+
+      logoutChannel.onmessage = function (e) {
+        console.log("logoutChannel", { e });
+        if (e.data.cmd === "logout") {
+          logout();
+        } else if (e.data.cmd === "signedIn") {
+          signedIn(e.data.user);
+          btn.innerText = "Log out";
+        }
+      };
+
+      function toggleStatus() {
+        if (currentStatus === "signedIn") {
+          logout();
+          logoutChannel.postMessage({ cmd: "logout" });
+        } else {
+          signedIn();
+          logoutChannel.postMessage({ cmd: "signedIn" });
+        }
+      }
+
+      function logout() {
+        currentStatus = "logout";
+        status.innerText = "logged out";
+        btn.innerText = "Sign in";
+      }
+
+      function signedIn() {
+        currentStatus = "signedIn";
+        status.innerText = `signed in`;
+        btn.innerText = "Log out";
+      }
+    </script>
+  </body>
+</html>
