@@ -1,45 +1,44 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Implementing BroadastChannel API</title>
-    </head>
-    <body>
-	<input type="color" id="bgColorPicker" />
-	<script>
-	 (() => {
-	     const bc = new BroadcastChannel("channel_name");
-	     const bodyElement = document.querySelector("body");
-	     const bgColorPicker = document.querySelector("#bgColorPicker");
+  <head>
+    <meta charset="UTF-8" />
+    <title>Implementing BroadastChannel API</title>
+  </head>
+  <body>
+    <input type="color" id="bgColorPicker" />
+    <script>
+      (() => {
+        const bc = new BroadcastChannel("channel_name");
+        const bodyElement = document.querySelector("body");
+        const bgColorPicker = document.querySelector("#bgColorPicker");
 
-	     const COLOR_KEY = "bgColor";
+        const COLOR_KEY = "bgColor";
 
-	     const setBackgroundColor = (color) => {
-		 bodyElement.style.backgroundColor = color;
-	     };
+        const setBackgroundColor = (color) => {
+          bodyElement.style.backgroundColor = color;
+        };
 
-	     bc.onmessage = (messageEvent) => {
-		 if (messageEvent.data === "updateBgColor") {
-  		     const bgColor = localStorage.getItem(COLOR_KEY);
- 		     bgColorPicker.value = bgColor;
-		     setBackgroundColor(bgColor);
-		 }
-	     };
+        bc.onmessage = (messageEvent) => {
+          if (messageEvent.data === "updateBgColor") {
+            const bgColor = localStorage.getItem(COLOR_KEY);
+            bgColorPicker.value = bgColor;
+            setBackgroundColor(bgColor);
+          }
+        };
 
-	     if (localStorage.getItem(COLOR_KEY)) {
-		 setBackgroundColor(localStorage.getItem(COLOR_KEY))
-	     } else {
-		 alert("Please choose a background color!");
-	     }
+        if (localStorage.getItem(COLOR_KEY)) {
+          setBackgroundColor(localStorage.getItem(COLOR_KEY));
+        } else {
+          alert("Please choose a background color!");
+        }
 
-	     bgColorPicker.onchange = (e) => {
-		 const bgColor = e.target.value;
-		 localStorage.setItem(COLOR_KEY, bgColor);
-		 setBackgroundColor(bgColor);
-		 bc.postMessage("updateBgColor");
-	     };
-
-	 })()
-	</script>
-    </body>
+        bgColorPicker.onchange = (e) => {
+          const bgColor = e.target.value;
+          localStorage.setItem(COLOR_KEY, bgColor);
+          setBackgroundColor(bgColor);
+          bc.postMessage("updateBgColor");
+        };
+      })();
+    </script>
+  </body>
 </html>
