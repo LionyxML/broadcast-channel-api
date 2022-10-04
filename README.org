@@ -14,7 +14,7 @@ pages.
 
 Basic usage:
 #+BEGIN_SRC javascript
-  const channel = new Broadcastchannel("event_bus");
+  const channel = new BroadcastChannel("event_bus");
 
   channel.postMessage("Hello! I am sending you this message!");
 
@@ -23,7 +23,6 @@ Basic usage:
   };
 
   channel.close();
-
 #+END_SRC
 
 Explore the HTML examples in this repo.
